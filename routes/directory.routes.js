@@ -32,7 +32,7 @@ app.get('/browse-directory', function(req, res) {
 			res.render('browse-directory', { directories: { message : 'No records' } });
 		}else {
 			// render the browse directory route page with records
-			res.render('browse-directory', { directories: directories });
+			res.render('browse-directory', { directories: directories, title: 'eDirectory | Browse All Business' });
 		}
 	});
 });
