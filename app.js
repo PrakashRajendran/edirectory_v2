@@ -31,7 +31,10 @@ app.use(express.static(path.join(__dirname, 'public/uploads')));
 
 
 var directory = require('./routes/directory.routes');
+var api = require('./routes/api.routes');
+
 app.use('/', directory);
+app.use('/api', api);
 app.use('/directory', directory);
 
 // catch 404 and forward to error handler
@@ -41,8 +44,8 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// Connect to MongoLab cloud hosting mongodb service
-var mongodbString = 'mongodb://admin:edirectory@ds059821.mongolab.com:59821/edirectory';
+// Here we find an mongolab cloud hosting database to connect to
+var mongodbString = 'mongodb://localhost/edirectory' || 'mongodb://admin:directory@ds059821.mongolab.com:59821/edirectory';
 
 // Mongoose will queue up database operations and release them when the connection is complete. Makes connection asynchronously.
 mongoose.connect(mongodbString, function (err, res) {
