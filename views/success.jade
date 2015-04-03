@@ -1,0 +1,18 @@
+// include header file
+include ./includes/header.jade
+.container
+      .row
+        .col-md-9
+          .main_content
+            h3.title
+              span.pull-left
+               if message=='Delete'
+                p You have successfully deleted the business listing.
+               else if message=='Create'
+                p You have successfully created the business listing.
+               else if message=='Update'
+                p You have successfully updated the business listing.
+            .row
+              .col-md-6
+    // include the footer
+    include ./includes/footer.jade

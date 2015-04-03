@@ -1,0 +1,41 @@
+// include the header 
+include ./includes/header.jade
+.container
+      .row
+        .col-md-9
+          .main_content
+            h3.title
+              span.pull-left REGISTER NEW BUSINESS
+            .row
+              form(role='form', name='add-directory', action='/add-directory', method='POST', enctype='multipart/form-data')
+                .col-md-6
+                  .form-group
+                    label(for='businessname') Business Name
+                    input.form-control(type='text', name='businessname', placeholder='Business Name')
+                  .form-group
+                    label(for='businessdescription') Business Description
+                    input#businessdescription.form-control(type='text', name='businessdescription', placeholder='Business Description')
+                  .form-group
+                    label(for='businessownername') Business Owner Name
+                    input#businessownername.form-control(type='text', name='businessownername', placeholder='Business Owner Name')
+                  .form-group
+                    label(for='businesslogo') Upload Business Logo
+                    input#businesslogo.form-control(type='file', name='businesslogo', placeholder='Upload Business Logo')
+                  .form-group
+                    button.btn.btn-primary(type='submit') Save
+                    button.btn.btn-default(type='reset') Reset
+                .col-md-6.right-form
+                  .form-group
+                    label(for='businessphoneno') Business Phone No
+                    input#businessphoneno.form-control(type='tel', name='businessphoneno', placeholder='Business Phone No')
+                  .form-group
+                    label(for='businesswebsite') Business Website
+                    input#businesswebsite.form-control(type='text', name='businesswebsite', placeholder='Business Website')
+                  .form-group
+                    label(for='businessaddress') Business Address
+                    textarea#businessaddress.form-control(placeholder='Business Address', name='businessaddress')
+                  .form-group
+                    label(for='businessemail') Business Email
+                    input#businessemail.form-control(type='text', name='businessemail', placeholder='Business Email')
+    // include the footer
+    include ./includes/footer.jade

@@ -1,0 +1,44 @@
+// include the header 
+include ./includes/header.jade
+.container
+      .row
+        .col-md-9
+          .main_content
+            h3.title
+              span.pull-left ADD NEW BUSINESS
+            .row
+              form(id='edit-directory', name='edit-directory', method='POST', enctype='multipart/form-data')
+                .col-md-6
+                  .form-group
+                    label(for='businessname') Business Name
+                    input.form-control(type='text', name='businessname', placeholder='Business Name', value='#{directory.businessName}')
+                  .form-group
+                    label(for='businessdescription') Business Description
+                    input#businessdescription.form-control(type='text', name='businessdescription', placeholder='Business Description', value='#{directory.businessDescription}')
+                  .form-group
+                    label(for='businessownername') Business Owner Name
+                    input#businessownername.form-control(type='text', name='businessownername', placeholder='Business Owner Name', value='#{directory.businessOwner}')
+                  .form-group
+                    label(for='businesslogo') Upload Business Logo
+                    input#businesslogo.form-control(type='file', name='businesslogo', placeholder='Upload Business Logo', value='#{directory.businessLogoUrl}')
+                  .form-group
+                    button.btn.btn-primary(type='submit') Update
+                    .btn-group.btn-delete
+                      button.btn.btn-sm.btn-danger
+                        span.glyphicon.glyphicon-remove
+                        a.btn-link(href='/delete-directory/#{directory._id}' onclick='return confirm("Please confirm the business directory deletion ?")') Delete
+                .col-md-6.right-form
+                  .form-group
+                    label(for='businessphoneno') Business Phone No
+                    input#businessphoneno.form-control(type='tel', name='businessphoneno', placeholder='Business Phone No', value='#{directory.businessPhoneNo}')
+                  .form-group
+                    label(for='businesswebsite') Business Website
+                    input#businesswebsite.form-control(type='text', name='businesswebsite', placeholder='Business Website', value='#{directory.businessWebsite}')
+                  .form-group
+                    label(for='businessaddress') Business Address
+                    textarea#businessaddress.form-control(placeholder='Business Address', name='businessaddress', value='#{directory.businessAddress}')
+                  .form-group
+                    label(for='businessemail') Business Email
+                    input#businessemail.form-control(type='text', name='businessemail', placeholder='Business Email', value='#{directory.businessEmail}')
+    // include the footer
+    include ./includes/footer.jade
