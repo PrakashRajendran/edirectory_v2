@@ -219,7 +219,7 @@ app.get('/edit-directory/:id', function (req, res, next) {
             res.send('Directory Listing ' + id + ' not found');
         }
         else {
-            res.render('edit-directory', { directory: directory, title: 'eDirectory | Browse Business'} });
+            res.render('edit-directory', { directory: directory, title: 'eDirectory | Browse Business'});
         }
     });
 });
@@ -240,7 +240,7 @@ app.get('/delete-directory/:id', function (req, res, next) {
             res.send('Error finding business directory listing ==>' + id);
         }
         else {
-            res.render('success', { message: 'Delete', title: 'eDirectory | Delete Business'} );
+            res.render('success', { message: 'Delete', title: 'eDirectory | Delete Business'});
 			res.end();
         }
     });
