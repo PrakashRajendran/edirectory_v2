@@ -45,7 +45,7 @@ app.get('/browse-directory', function(req, res) {
  */
 app.get('/', function(req, res) {
 	// render the browse-directory route page with no records
-	res.render('index', { message : 'Home' });
+	res.render('index', { title : 'eDirectory | Home' });
 });
 
 /**	
@@ -55,7 +55,7 @@ app.get('/', function(req, res) {
  */
 app.get('/add-directory', function(req, res) {
 	// Display the Add directory page
-	res.render('add-directory', { title: 'eDirectory | Add New Business'});
+	res.render('add-directory', { title: 'eDirectory | Register New Business'});
 });
 
 /**
@@ -126,7 +126,7 @@ app.post('/add-directory', function(req, res) {
 							res.render('error', { error: err});
 							res.end();
 						} else {   
-							res.render('success', { message: 'Create'});
+							res.render('success', { message: 'Create', title: 'eDirectory | Added Business'});
 							res.end();
 						}
 					});
@@ -194,7 +194,7 @@ app.post('/edit-directory/:id', function(req, res) {
 							res.end();
 						} else {  //update
 							console.log("inside directory.update insert method");
-							res.render('success', { message: 'Update'});
+							res.render('success', { message: 'Update', title: 'eDirectory | Updated Business'});
 							res.end();
 						}
 					});
@@ -207,7 +207,7 @@ app.post('/edit-directory/:id', function(req, res) {
  *	requestType	:	/GET
  *	paramId		:	id
  *	routeName	:	/edit-directory/:id
- *	description	:	Get all the business directory listings and display them in the index page
+ *	description	:	Get all the business directory listings and display them in the browse-directory page
  */
 app.get('/edit-directory/:id', function (req, res, next) {
     //store the id from the url in a variable
@@ -219,7 +219,7 @@ app.get('/edit-directory/:id', function (req, res, next) {
             res.send('Directory Listing ' + id + ' not found');
         }
         else {
-            res.render('edit-directory', { directory: directory });
+            res.render('edit-directory', { directory: directory, title: 'eDirectory | Browse Business'} });
         }
     });
 });
@@ -240,7 +240,7 @@ app.get('/delete-directory/:id', function (req, res, next) {
             res.send('Error finding business directory listing ==>' + id);
         }
         else {
-            res.render('success', { message: 'Delete'} );
+            res.render('success', { message: 'Delete', title: 'eDirectory | Delete Business'}} );
 			res.end();
         }
     });
