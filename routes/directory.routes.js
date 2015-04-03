@@ -29,7 +29,7 @@ app.get('/browse-directory', function(req, res) {
 		// check if the directories from the database is empty or not
 		if (isEmpty(directories)) {
 			// render the browse-directory route page with no records
-			res.render('browse-directory', { directories: { message : 'No records' } });
+			res.render('browse-directory', { directories: { message : 'No records', title: 'eDirectory | Browse All Business' } });
 		}else {
 			// render the browse directory route page with records
 			res.render('browse-directory', { directories: directories, title: 'eDirectory | Browse All Business' });
