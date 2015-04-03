@@ -6,6 +6,8 @@ include ./includes/header.jade
         .col-md-9
           .main_content.detail-product
             h3.title BROWSE ALL BUSINESSES
+            if directories.message== 'No records' 
+             p#errorMessage Oops... Sorry. There is currently no business listing in the database.
             if directories.message!= 'No records'
              each directory, i in directories
               .listing-item

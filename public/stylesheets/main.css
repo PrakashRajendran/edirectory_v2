@@ -24,6 +24,13 @@ body{
 	margin-top: 150px;
 }
 
+#errorMessage {
+	color: red;
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
+}
+
 *:focus {
     outline: 0;
 }

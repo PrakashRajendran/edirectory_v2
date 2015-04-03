@@ -22,8 +22,10 @@ var express = require('express'),
 app.get('/request-all', function(req, res) {
 	Directory.find(function(err, directories) {
 		
-		if (isEmpty(directories)) {
-            res.render('request-all', { directories: 'Oops...We couldn\'t able to find the requested business name ' + req.params.name + ' in our database '});
+		if (err) {
+			res.render('request-all', { directories: err});
+		}else if (directories==null) {
+            res.render('request-all', { directories: 'empty'});
 		}else {
 			// render all the business listings from the database
 			res.render('request-all', { directories: JSON.stringify(directories,undefined, 2)});
@@ -31,13 +33,7 @@ app.get('/request-all', function(req, res) {
 	});
 });
 
-/**
- *	functionName	: isEmpty
- *	description		: It is used to check the object empty or not
- */
-var isEmpty = function(obj) {
-  return Object.keys(obj).length === 0;
-}
+
 
 /**	
  *	requestType	:	/GET
@@ -47,16 +43,17 @@ var isEmpty = function(obj) {
  */
 app.get('/request-business/:name', function (req, res, next) {
     
-	//get the business name from the reqest parameters and create the below query
+	//get the business name from the request parameters and create the below query
 	var query = { 'businessName' : req.params.name };
 
-	//pass the query object to find the business listing in the databbase
+	//pass the query object to find the business listing in the database
     Directory.findOne(query, function (err, directory) {
         if (err) {
-            res.render('request-business', { directory: 'Oops...We couldn\'t able to find the requested business name ' + req.params.name + ' in our database '});
-        }
-        else {
-            res.render('request-business', { directory: directory});
+            res.render('request-business', { directory: err});
+        }else if (directory==null) {
+			res.render('request-business', { directory: 'empty', businessname: req.params.name});
+		}else {
+            res.render('request-business', { directory: JSON.stringify(directory,undefined,2)});
         }
     });
 });
