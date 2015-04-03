@@ -1,1 +1,1 @@
-# edirectory_v2
+eDirectory App - NodeJS + Mongoose + MongoDB
