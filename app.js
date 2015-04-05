@@ -45,7 +45,7 @@ app.use(function(req, res, next) {
 });
 
 // Here we find an mongolab cloud hosting database to connect to
-var mongodbString = 'mongodb://admin:edirectory@ds059821.mongolab.com:59821/edirectory';
+var mongodbString = 'mongodb://localhost/edirectory' || 'mongodb://admin:directory@ds059821.mongolab.com:59821/edirectory';
 
 // Mongoose will queue up database operations and release them when the connection is complete. Makes connection asynchronously.
 mongoose.connect(mongodbString, function (err, res) {

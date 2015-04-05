@@ -24,13 +24,6 @@ body{
 	margin-top: 150px;
 }
 
-#errorMessage {
-	color: red;
-	text-align: center;
-	font-weight: bold;
-	font-size: 14px;
-}
-
 *:focus {
     outline: 0;
 }
@@ -41,6 +34,10 @@ a:link,a:visited{
 
 a:hover{
 	color:#EE3C1F;
+}
+
+#errorMessage {
+	color: red;
 }
 
 label,form,input,select,textarea,button{

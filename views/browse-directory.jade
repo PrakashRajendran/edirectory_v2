@@ -6,8 +6,6 @@ include ./includes/header.jade
         .col-md-9
           .main_content.detail-product
             h3.title BROWSE ALL BUSINESSES
-            if directories.message== 'No records' 
-             p#errorMessage Oops... Sorry. There is currently no business listing in the database.
             if directories.message!= 'No records'
              each directory, i in directories
               .listing-item
@@ -42,5 +40,41 @@ include ./includes/header.jade
                       button.btn.btn-sm.btn-primary
                         span.glyphicon.glyphicon-edit
                         a.btn-link(href='/edit-directory/#{directory._id}') Edit
+            .listing-item
+              .row
+                .col-md-7
+                  .featured-item
+                    .row
+                      .col-md-4
+                        a(href='http://www.captheme.com/bootstrap/edirectory/detail.html')
+                          img.img.pull-left(src='./images/1_photo_2941.jpg', alt='Setup your Table for Special Events', title='Setup your Table for Special Events')
+                      .col-md-8
+                        h5
+                          a(href='http://www.captheme.com/bootstrap/edirectory/detail.html') Setup your Table for Special Events
+                        p
+                          | This is example text for the overview section. Hey there where ya goin', not exactly knowin', who says you have to call just one place home. He's goin' everywhere, B.J. McKay and his best friend Bear.
+                .col-md-5
+                  .other_info
+                    address
+                      i
+                        | 34 Regis Rd
+                        br
+                        | East Falmouth, Massachusetts, United States 02536
+                    p
+                      strong Contact Name:
+                      |  Adam Samdllor
+                      br
+                      strong Phone:
+                      |  (434) 658-4638
+                      br
+                      strong E-mail:
+                      a(href='http://www.captheme.com/bootstrap/edirectory/view_all.html#myModal', role='button', data-toggle='modal') send an e-mail
+                      br
+                      strong URL:
+                      a(href='http://www.captheme.com/bootstrap/edirectory/view_all.html#', target='_blank') http://www.cuongv.com
+                    .btn-group
+                      button.btn.btn-sm.btn-primary
+                        span.glyphicon.glyphicon-edit
+                        |  Edit
     // include the footer
     include ./includes/footer.jade

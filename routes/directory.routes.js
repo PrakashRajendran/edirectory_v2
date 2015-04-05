@@ -116,18 +116,15 @@ app.post('/add-directory', function(req, res) {
 			// copy the file from temporary path to the public/uploads directory
 			fs.copy(temp_path, new_location + file_name, function(err) {  
 				if (err) {
-					res.render('error', { error: err});
-					res.end();
+					res.render('error', { error: 'Error copying uploaded file', errorStack: err.stack} );
 				} else {
 					// Use the Directory Model and save the form data into the database
 					Directory.create(directoryObj, function(err, objects, callback) {
 
 						if (err) {
-							res.render('error', { error: err});
-							res.end();
+							res.render('error', { error: 'Error creating business listing ' + id, errorStack: err.stack} );	
 						} else {   
 							res.render('success', { message: 'Create', title: 'eDirectory | Added Business'});
-							res.end();
 						}
 					});
 				}
@@ -184,18 +181,15 @@ app.post('/edit-directory/:id', function(req, res) {
 			fs.copy(temp_path, new_location + file_name, function(err) {  
 				if (err) {
 					res.render('error', { error: err});
-					res.end();
 				} else {
 					Directory.update({ _id: id}, directoryUpdateObj, function(err) {
 						console.log("inside directory.update method");
 
 						if (err) {
-							res.render('error', { error: err});
-							res.end();
+							res.render('error', { error: 'Error updating business listing ' + id, errorStack: err.stack} );
 						} else {  //update
 							console.log("inside directory.update insert method");
 							res.render('success', { message: 'Update', title: 'eDirectory | Updated Business'});
-							res.end();
 						}
 					});
 				}
@@ -210,16 +204,17 @@ app.post('/edit-directory/:id', function(req, res) {
  *	description	:	Get all the business directory listings and display them in the browse-directory page
  */
 app.get('/edit-directory/:id', function (req, res, next) {
-    //store the id from the url in a variable
+    
+	//get the id from the request parameter to edit the business listing
     var id = req.params.id;
 
     //use the product model to look up the product with this id    
     Directory.findById(id, function (err, directory) {
         if (err) {
-            res.send('Directory Listing ' + id + ' not found');
+            res.render('error', { error: 'Directory Listing ' + id + ' not found', errorStack: err.stack} );
         }
         else {
-            res.render('edit-directory', { directory: directory, title: 'eDirectory | Browse Business'});
+            res.render('edit-directory', { directory: directory, title: 'eDirectory | Browse Business'}); // record found and redirecting to display the business listing information 
         }
     });
 });
@@ -231,17 +226,20 @@ app.get('/edit-directory/:id', function (req, res, next) {
  *	description	:	Get all the business directory listings and display them in the index page
  */
 app.get('/delete-directory/:id', function (req, res, next) {
-    //store the id from the url in a variable
+    
+	// get the business listing id from the request parameter
     var id = req.params.id;
 
-    //use the directory model to look up the business listing with this id    
+    //use the directory model to look up the business listing with above id and remove the document
     Directory.findByIdAndRemove(id, function (err, directory) {
-        if (err) {
-            res.send('Error finding business directory listing ==>' + id);
+        
+		//error
+		if (err) {
+            res.render('error', { error: 'Error finding business directory listing ==>' + id, errorStack: err.stack} );
         }
         else {
-            res.render('success', { message: 'Delete', title: 'eDirectory | Delete Business'});
-			res.end();
+            res.render('success', { message: 'Delete', title: 'eDirectory | Delete Business'}); // record deleted successfully and redirecting to confirmation page
+			res.end(); // end of response
         }
     });
 });
