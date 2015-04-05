@@ -22,10 +22,26 @@ var express = require('express'),
  */
 app.get('/request-all', function(req, res) {
 	Directory.find(function(err, directories) {
-		// render the browse-directory route page with no records
-		res.render('request-all', { directories: JSON.stringify(directories,undefined, 2)});
+		
+		if (err) {
+			res.render('error', { error: 'Error finding business listing ' + id, errorStack: err.stack} );	
+		}else if (isEmpty(directories)) {
+			res.render('request-all', { directories: 'empty'});
+		}else {
+			// render the browse-directory route page with no records
+			res.render('request-all', { directories: JSON.stringify(directories,undefined, 2)});
+		}
+		
 	});
 });
+
+/**
+ *	functionName	: isEmpty
+ *	description		: It is used to check the object empty or not
+ */
+var isEmpty = function(obj) {
+  return Object.keys(obj).length === 0;
+}
 
 /**	
  *	requestType	:	/GET
@@ -40,9 +56,10 @@ app.get('/request-business/:name', function (req, res, next) {
 
     Directory.findOne(query, function (err, directory) {
         if (err) {
-			console.log(err);
             res.render('error', { error: 'Error finding business listing ' + id, errorStack: err.stack} );	
-        }
+        }else if (directory==null) {
+			res.render('request-business', { directories: 'empty'});
+		}
         else {
 			console.log(directory);
             res.render('request-business', { directory: directory});

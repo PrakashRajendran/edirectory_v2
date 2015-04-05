@@ -5,10 +5,13 @@ include ./includes/header.jade
         .col-md-9
           .main_content
             h3.title
-              span.pull-left
+             span.pull-left
+              h3 Below is the JSON object retrieved from the eDirectory database
             .row
               .col-md-12
-               h3 Below is the JSON object retrieved from the eDirectory database
-               pre #{directories}
+               if directories=='empty'
+                p#errorMessage Oops...Currently, there is no business listings in our database.
+               else
+                pre #{directories}
     // include the footer
     include ./includes/footer.jade
