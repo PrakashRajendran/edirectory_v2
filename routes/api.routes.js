@@ -17,18 +17,22 @@ var express = require('express'),
 
 /**	
  *	requestType	:	/GET
- *	routeName	:	/browse-directory
- *	description	:	Get all the business directory listings from the database and display them in the browse-directory page
+ *	routeName	:	/request-all
+ *	Usage		: 	API
+ *	description	:	Get all the business directory listings from the database and return the JSON object
  */
 app.get('/request-all', function(req, res) {
 	Directory.find(function(err, directories) {
 		
 		if (err) {
-			res.render('error', { error: 'Error finding business listing ' + id, errorStack: err.stack} );	
+			var report = new Error('Error finding the business listings' + id);
+			report.status = 500;
+            report.inner = err;
+			return next(report);
 		}else if (isEmpty(directories)) {
 			res.render('request-all', { directories: 'empty'});
 		}else {
-			// render the browse-directory route page with no records
+			// render the request-all page with JSON object
 			res.render('request-all', { directories: JSON.stringify(directories,undefined, 2)});
 		}
 		
@@ -37,7 +41,7 @@ app.get('/request-all', function(req, res) {
 
 /**
  *	functionName	: isEmpty
- *	description		: It is used to check the object empty or not
+ *	description		: It is used to check the object is empty or not
  */
 var isEmpty = function(obj) {
   return Object.keys(obj).length === 0;
@@ -46,25 +50,31 @@ var isEmpty = function(obj) {
 /**	
  *	requestType	:	/GET
  *	paramId		:	id
+ *	Usage		:	API
  *	routeName	:	/request-business/:name
- *	description	:	Find the requested business name and get business listing information
+ *	description	:	Find the requested business name and return the JSON object
  */
 app.get('/request-business/:name', function (req, res, next) {
-    //store the id from the url in a variable
     
-	var query = { 'businessName' : req.params.name };
+	//get the value from the request parameter
+    var query = { 'businessName' : req.params.name };
 
+	// Use the mongoose directory model to find the requested business name in the mongo database and return the JSON object
     Directory.findOne(query, function (err, directory) {
         if (err) {
-            res.render('error', { error: 'Error finding business listing ' + id, errorStack: err.stack} );	
+			var report = new Error('Error finding business listing ' + id);
+			report.status = 500;
+            report.inner = err;
+			return next(report);
         }else if (directory==null) {
 			res.render('request-business', { directories: 'empty'});
 		}
         else {
-			console.log(directory);
             res.render('request-business', { directory: directory});
         }
     });
 });
+
+//export the app so that the entire application can use it
 
 module.exports = app;

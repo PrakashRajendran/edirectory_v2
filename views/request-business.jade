@@ -13,6 +13,9 @@ include ./includes/header.jade
             .row
               .col-md-12
                if directories=='empty'
+                h4 Below is the JSON object retrieved from the eDirectory database for requested business id
+                h5 Usage: /api/request-business/{business_name}
+                h5 Example: /api/request-business/Honda
                 p#errorMessage Opps....Sorry, we couldn't able to find the requested business.
                else
                 

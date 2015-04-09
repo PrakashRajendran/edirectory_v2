@@ -1,3 +1,35 @@
+html.error body {
+	background: #f2f2f2;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+html.error body .container {
+	height: auto;
+	line-height: 1;
+	padding: 5%;
+	width: 70%;
+}
+
+#time h1, #time h2 {
+color: #7354bd;
+}
+
+#time h1, #time h2 {
+color: #7354bd;
+}
+
+html.error body img {
+	bottom: 0;
+	height: 370px;
+	position: absolute;
+	right: 60px;
+	width: 335px;
+	z-index: -2;
+}
+
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;

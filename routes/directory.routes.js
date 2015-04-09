@@ -60,7 +60,7 @@ app.get('/add-directory', function(req, res) {
 
 /**
  *	functionName	: isEmpty
- *	description		: It is used to check the object empty or not
+ *	description		: It is used to check the object is empty or not
  */
 var isEmpty = function(obj) {
   return Object.keys(obj).length === 0;
@@ -76,7 +76,7 @@ app.post('/add-directory', function(req, res) {
 	// Check if the request url is from /add-directory and request method is post
 	if (req.url == '/add-directory' && req.method.toLowerCase() == 'post') {
 		
-		// define the formidable incoming form, businessLogourl
+		// define the formidable incoming form, businessLogourl, directoryObj
 		var form = new formidable.IncomingForm(), directoryObj, businessLogoUrl;
 		
 		
@@ -89,7 +89,7 @@ app.post('/add-directory', function(req, res) {
 			}else if (files.businesslogo.name=='') {
 				businessLogoUrl = '/uploads/' + 'no_image.jpg';
 			}
-			// save the form details into the directoryObj JSON object
+			// create the JSON object and store the form details
 			directoryObj = {
 				businessName : fields.businessname,
 				businessDescription : fields.businessdescription,
@@ -105,7 +105,6 @@ app.post('/add-directory', function(req, res) {
 		form.on('end', function(fields, files) {
 			
 			// Set the default image path if user hasn't uploaded any image
-			
 			/* Temporary location of our uploaded file */
 			var temp_path = this.openedFiles[0].name==''?'public/images/no_image.jpg':this.openedFiles[0].path;
 			/* The file name of the uploaded file */
@@ -116,15 +115,17 @@ app.post('/add-directory', function(req, res) {
 			// copy the file from temporary path to the public/uploads directory
 			fs.copy(temp_path, new_location + file_name, function(err) {  
 				if (err) {
-					res.render('error', { error: 'Error copying uploaded file', errorStack: err.stack} );
+					var report = new Error('Error occured during the file upload process'); // render error if any error occured during file upload process
+					report.status = 500;
+					report.inner = err;
+					return next(report);  
 				} else {
 					// Use the Directory Model and save the form data into the database
 					Directory.create(directoryObj, function(err, objects, callback) {
-
 						if (err) {
 							res.render('error', { error: 'Error creating business listing ' + id, errorStack: err.stack} );	
 						} else {   
-							res.render('success', { message: 'Create', title: 'eDirectory | Added Business'});
+							res.render('success', { message: 'Create', title: 'eDirectory | Added Business'}); // redirect the user to success page with the success message
 						}
 					});
 				}
@@ -141,19 +142,23 @@ app.post('/add-directory', function(req, res) {
  */
 app.post('/edit-directory/:id', function(req, res) {
 	
+		//get the value from the request parameter
 		var id = req.params.id;
 		
-		// Post the form data from add-directory page
+		// define the formiable form, directoryObj, businessLogoUrl
 		var form = new formidable.IncomingForm(), directoryObj, businessLogoUrl;
 		
+		// start the form parsing
 		form.parse(req, function(err, fields, files) {
 			
+			// set the default if the user hasn't uploaded any image
 			if (files.businesslogo.name!='') {
 				businessLogoUrl = '/uploads/' + files.businesslogo.name;
 			}else if (files.businesslogo.name=='') {
 				console.log("no image");
 				businessLogoUrl = '/uploads/' + 'no_image.jpg';
 			}
+			// create the JSON object and store the form details
 			directoryUpdateObj = {
 				_id: req.params.id,
 				businessName : fields.businessname,
@@ -167,29 +172,28 @@ app.post('/edit-directory/:id', function(req, res) {
 			}
 		});
 
+		// start saving the form once the file upload is complete
 		form.on('end', function(fields, files) {
+			
 			/* Temporary location of our uploaded file */
-			console.log("opened file   " + this.openedFiles[0].name);
 			var temp_path = this.openedFiles[0].name==''?'public/images/no_image.jpg':this.openedFiles[0].path;
-			console.log("temp path   " +temp_path);
+
 			/* The file name of the uploaded file */
 			var file_name = this.openedFiles[0].name==''?'no_image.jpg': this.openedFiles[0].name;
 			
-			console.log("file name " +file_name);
 			/* Location where we want to copy the uploaded file */
 			var new_location = 'public/uploads/';
 			fs.copy(temp_path, new_location + file_name, function(err) {  
 				if (err) {
-					res.render('error', { error: err});
+					res.render('error', { error: err}); // render the error message if any issues occured during the file upload process
 				} else {
 					Directory.update({ _id: id}, directoryUpdateObj, function(err) {
-						console.log("inside directory.update method");
 
 						if (err) {
 							res.render('error', { error: 'Error updating business listing ' + id, errorStack: err.stack} );
 						} else {  //update
 							console.log("inside directory.update insert method");
-							res.render('success', { message: 'Update', title: 'eDirectory | Updated Business'});
+							res.render('success', { message: 'Update', title: 'eDirectory | Updated Business'}); //redirect the user to success page if the update process is completed successfully
 						}
 					});
 				}
@@ -201,17 +205,20 @@ app.post('/edit-directory/:id', function(req, res) {
  *	requestType	:	/GET
  *	paramId		:	id
  *	routeName	:	/edit-directory/:id
- *	description	:	Get all the business directory listings and display them in the browse-directory page
+ *	description	:	Get the requested business directory listing and display them in the edit form
  */
 app.get('/edit-directory/:id', function (req, res, next) {
     
 	//get the id from the request parameter to edit the business listing
     var id = req.params.id;
 
-    //use the product model to look up the product with this id    
+    //use the Directory model to look up the business directory with this id    
     Directory.findById(id, function (err, directory) {
         if (err) {
-            res.render('error', { error: 'Directory Listing ' + id + ' not found', errorStack: err.stack} );
+            var report = new Error('Directory listing not found' + id);
+			report.status = 500;
+            report.inner = err;
+			return next(report);
         }
         else {
             res.render('edit-directory', { directory: directory, title: 'eDirectory | Browse Business'}); // record found and redirecting to display the business listing information 
@@ -223,7 +230,7 @@ app.get('/edit-directory/:id', function (req, res, next) {
  *	requestType	:	/GET
  *	paramId		:	id
  *	routeName	:	/delete-directory/:id
- *	description	:	Get all the business directory listings and display them in the index page
+ *	description	:	Delete the requested business directory listing from the database
  */
 app.get('/delete-directory/:id', function (req, res, next) {
     
@@ -235,7 +242,10 @@ app.get('/delete-directory/:id', function (req, res, next) {
         
 		//error
 		if (err) {
-            res.render('error', { error: 'Error finding business directory listing ==>' + id, errorStack: err.stack} );
+            var report = new Error('Error finding the business directory listing from the database');
+			report.status = 500;
+            report.inner = err;
+			return next(report);
         }
         else {
             res.render('success', { message: 'Delete', title: 'eDirectory | Delete Business'}); // record deleted successfully and redirecting to confirmation page
@@ -244,4 +254,5 @@ app.get('/delete-directory/:id', function (req, res, next) {
     });
 });
 
+//export the app object so that the entire application can use it
 module.exports = app;
