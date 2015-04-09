@@ -36,7 +36,8 @@ include ./includes/header.jade
                     input#businesswebsite.form-control(type='text', name='businesswebsite', placeholder='Business Website', value='#{directory.businessWebsite}')
                   .form-group
                     label(for='businessaddress') Business Address
-                    textarea#businessaddress.form-control(placeholder='Business Address', name='businessaddress', value='#{directory.businessAddress}')
+                    textarea#businessaddress.form-control(placeholder='Business Address', name='businessaddress')
+                      | #{directory.businessAddress}
                   .form-group
                     label(for='businessemail') Business Email
                     input#businessemail.form-control(type='text', name='businessemail', placeholder='Business Email', value='#{directory.businessEmail}')
