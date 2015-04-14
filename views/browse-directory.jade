@@ -37,8 +37,9 @@ include ./includes/header.jade
                       strong URL:
                       a(href='http://#{directory.businessWebsite}', target='_blank') #{directory.businessWebsite}
                     .btn-group
-                      button.btn.btn-sm.btn-primary
+                      a.btn-link(href='/edit-directory/#{directory._id}')
+                       button.btn.btn-sm.btn-primary
                         span.glyphicon.glyphicon-edit
-                        a.btn-link(href='/edit-directory/#{directory._id}') Edit
+                        Edit
     // include the footer
     include ./includes/footer.jade
